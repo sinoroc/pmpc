@@ -1,0 +1,15 @@
+# .gitignore
+
+
+# Python
+*.egg-info/
+.eggs/
+__pycache__/
+*.venv/
+
+
+# vi / vim
+.*.swp
+
+
+# EOF
