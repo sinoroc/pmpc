@@ -8,6 +8,10 @@ __pycache__/
 *.venv/
 
 
+# pytest
+.cache/
+
+
 # vi / vim
 .*.swp
 

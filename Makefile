@@ -1,8 +1,10 @@
 # Makefile
 
 
+python_package := pmpc
 pip_requirements := requirements.txt
-lint_packages := setup.py,pmpc
+python_test_modules := $(wildcard tests/*.py)
+pylint_packages := setup.py,$(python_package),$(python_test_modules)
 
 
 .PHONY: run
@@ -22,11 +24,16 @@ pep8:
 
 .PHONY: pylint
 pylint:
-	python setup.py lint --lint-packages=$(lint_packages)
+	python setup.py lint --lint-packages=$(pylint_packages)
 
 
 .PHONY: lint
 lint: pep8 pylint
+
+
+.PHONY: test
+test:
+	python setup.py pytest --addopts=-v
 
 
 # EOF
