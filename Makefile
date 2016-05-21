@@ -3,8 +3,14 @@
 
 python_package := pmpc
 pip_requirements := requirements.txt
-python_test_modules := $(wildcard tests/*.py)
-pylint_packages := setup.py,$(python_package),$(python_test_modules)
+pylint_packages := setup.py $(python_package) tests/*.py
+
+
+# join with commas
+comma := ,
+empty :=
+space := $(empty) $(empty)
+joinwithcommas = $(subst $(space),$(comma),$(wildcard $(1)))
 
 
 .PHONY: run
@@ -24,7 +30,8 @@ pep8:
 
 .PHONY: pylint
 pylint:
-	python setup.py lint --lint-packages=$(pylint_packages)
+	python setup.py lint \
+		--lint-packages=$(call joinwithcommas,$(pylint_packages))
 
 
 .PHONY: lint
