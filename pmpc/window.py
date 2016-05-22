@@ -19,37 +19,52 @@ class Frame(tkinter.Frame):  # pylint: disable=too-many-ancestors
     def __init__(self, master=None):
         super(Frame, self).__init__(master)  # before creating widgets
         self._create_widgets()
-        self.pack()
+        self._config_widgets()
+        self._layout_widgets()
         return None
 
     def _create_widgets(self):
+        # current track
         self.current_track_label = tkinter.Label(self, text=_("Pmpc"))
-        self.current_track_label.grid(row=0, column=0, columnspan=3)
+        # playback buttons
         self.previous_button = tkinter.Button(self, text=_("Previous"))
-        self.previous_button.grid(row=1, column=0)
         self.pause_button = tkinter.Button(self, text=_("Pause"))
-        self.pause_button.grid(row=1, column=1)
         self.next_button = tkinter.Button(self, text=_("Next"))
-        self.next_button.grid(row=1, column=2)
+        # playlist
         self._playlist_frame = tkinter.Frame(self)
         self._playlist_scrollbar = tkinter.Scrollbar(self._playlist_frame)
-        self._playlist_scrollbar.grid(
-            row=0,
-            column=1,
-            sticky=(tkinter.N + tkinter.S),
-        )
-        self.playlist = tkinter.ttk.Treeview(
-            self._playlist_frame,
-            yscrollcommand=self._playlist_scrollbar.set,
-        )
+        self.playlist = tkinter.ttk.Treeview(self._playlist_frame)
+        return None
+
+    def _config_widgets(self):
+        self.playlist.configure(yscrollcommand=self._playlist_scrollbar.set)
         self.playlist['columns'] = ('artist', 'title')
         self.playlist.column('artist', width=100)
         self.playlist.column('title', width=100)
         self.playlist.heading('artist', text=_("Artist"))
         self.playlist.heading('title', text=_("Title"))
         self._playlist_scrollbar.config(command=self.playlist.yview)
-        self.playlist.grid(row=0, column=0)
-        self._playlist_frame.grid(row=2, column=0, columnspan=3)
+        return None
+
+    def _layout_widgets(self):
+        options = {'sticky': tkinter.NSEW}
+        # current track
+        self.current_track_label.grid(row=0, column=0, columnspan=3, **options)
+        # playback buttons
+        self.previous_button.grid(row=1, column=0, **options)
+        self.pause_button.grid(row=1, column=1, **options)
+        self.next_button.grid(row=1, column=2, **options)
+        # playlist
+        self._playlist_scrollbar.grid(row=0, column=1, sticky=tkinter.NS)
+        self.playlist.grid(row=0, column=0, **options)
+        self._playlist_frame.grid(row=2, column=0, columnspan=3, **options)
+        # expand cells
+        self._playlist_frame.grid_columnconfigure(0, weight=1)
+        self._playlist_frame.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        self.grid_rowconfigure(2, weight=1)
         return None
 
 
@@ -66,6 +81,9 @@ class Window(task.Task):
         self._frame.pause_button['command'] = self._callback_pause
         self._frame.next_button['command'] = self._callback_next
         self._frame.previous_button['command'] = self._callback_previous
+        self._frame.grid(sticky=tkinter.NSEW)
+        self._root.grid_columnconfigure(0, weight=1)
+        self._root.grid_rowconfigure(0, weight=1)
         event_handlers = {
             'track': self._event_handler_track,
             'playlist': self._event_handler_playlist,
