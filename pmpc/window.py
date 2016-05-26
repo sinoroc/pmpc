@@ -139,6 +139,7 @@ class Window(task.Task):
         return None
 
     def _config_widgets(self):
+        self._root.title(_("Pmpc"))
         self._root.protocol('WM_DELETE_WINDOW', self._callback_quit)
         self._notify_event = '<<notify_event>>'
         self._root.bind(self._notify_event, self._interrupt)
