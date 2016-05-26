@@ -30,7 +30,7 @@ pep8:
 
 .PHONY: pylint
 pylint:
-	python setup.py lint \
+	python setup.py lint --lint-reports=no \
 		--lint-packages=$(call joinwithcommas,$(pylint_packages))
 
 

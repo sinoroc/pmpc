@@ -25,7 +25,7 @@ ENTRY_POINTS = {
 SETUP_REQUIREMENTS = [
     'pytest-runner',
     'setuptools-pep8',
-    'setuptools-lint'
+    'setuptools-lint',
 ]
 
 TEST_REQUIREMENTS = [
