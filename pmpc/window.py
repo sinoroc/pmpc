@@ -76,9 +76,8 @@ class Playlist(tkinter.Frame):  # pylint: disable=too-many-ancestors
 
     def _config_widgets(self):
         self.tree.configure(yscrollcommand=self.scrollbar.set)
+        self.tree.column('#0', width=50, anchor='e', stretch=tkinter.NO)
         self.tree['columns'] = ('artist', 'title')
-        self.tree.column('artist', width=100)
-        self.tree.column('title', width=100)
         self.tree.heading('artist', text=_("Artist"))
         self.tree.heading('title', text=_("Title"))
         self.scrollbar.config(command=self.tree.yview)
