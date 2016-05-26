@@ -149,6 +149,7 @@ def _read_track(raw_track):
     track = {
         'artist': raw_track.get('artist', ""),
         'title': raw_track.get('title', ""),
+        'pos': raw_track.get('pos', ""),
     }
     return track
 

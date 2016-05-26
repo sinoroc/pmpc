@@ -71,7 +71,7 @@ class Playlist(tkinter.Frame):  # pylint: disable=too-many-ancestors
 
     def _create_widgets(self):
         self.scrollbar = tkinter.Scrollbar(self)
-        self.tree = tkinter.ttk.Treeview(self)
+        self.tree = tkinter.ttk.Treeview(self, selectmode=tkinter.NONE)
         return None
 
     def _config_widgets(self):
@@ -121,6 +121,7 @@ class Window(task.Task):
     """
 
     def __init__(self, name):
+        self._current_track = {}
         self._create_widgets()
         self._config_widgets()
         self._layout_widgets()
@@ -219,19 +220,34 @@ class Window(task.Task):
             track['artist'],
             track['title'],
         )
+        self._current_track = track
+        self._highlight_current_track()
         return None
 
     def _set_current_playlist(self, playlist):
+        self._frame.playlist.tree.delete(
+            *self._frame.playlist.tree.get_children()
+        )
         for track_index, track in enumerate(playlist):
             self._frame.playlist.tree.insert(
-                '',
-                'end',
-                text=_("#{}").format(track_index + 1),
+                '',  # insert as top level item
+                track_index,  # item index
+                track['pos'],  # item identifier
+                text='{}'.format(track_index + 1),
                 values=(
                     track['artist'],
                     track['title'],
                 ),
             )
+        self._highlight_current_track()
+        return None
+
+    def _highlight_current_track(self):
+        pos = self._current_track.get('pos', '')
+        if self._frame.playlist.tree.exists(pos):
+            self._frame.playlist.tree.selection_set(pos)
+        else:
+            self._frame.playlist.tree.selection_set('')
         return None
 
 
