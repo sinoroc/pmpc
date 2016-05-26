@@ -246,6 +246,7 @@ class Window(task.Task):
         pos = self._current_track.get('pos', '')
         if self._frame.playlist.tree.exists(pos):
             self._frame.playlist.tree.selection_set(pos)
+            self._frame.playlist.tree.see(pos)
         else:
             self._frame.playlist.tree.selection_set('')
         return None
